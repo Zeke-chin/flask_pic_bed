@@ -8,19 +8,13 @@ from pathlib import Path
 from time import strftime, localtime
 
 from flask import Flask, request, Response, jsonify
-from flask import current_app
 from flask import json
 from werkzeug.exceptions import HTTPException
 from werkzeug.utils import secure_filename
-
-ENCODING = 'utf-8'
-UPLOAD_FOLDER = 'uploads'
-# 上传路径
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
-# 允许格式
+from flask import current_app
 
 app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config.from_pyfile('config.py')
 
 
 # 健康检查接口
@@ -34,7 +28,7 @@ def index():
 def allowed_file(filename):
     linux_file_allowed = "^[^+-./\t\b@#$%*()\[\]][^/\t\b@#$%*()\[\]]{1,254}$"
     filename_suffix = re.match(linux_file_allowed, filename)
-    allowed_suffix = '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+    allowed_suffix = '.' in filename and filename.rsplit('.', 1)[1].lower() in current_app.config['ALLOWED_EXTENSIONS']
     return filename_suffix and allowed_suffix
 
 
@@ -141,7 +135,7 @@ class Cache(object):
     # b64编码
     def pic_encode(image):
         base64_bytes = b64encode(image)
-        base64_string = base64_bytes.decode(ENCODING)
+        base64_string = base64_bytes.decode(app.config['ENCODING'])
         return base64_string
 
     @staticmethod
@@ -194,4 +188,4 @@ if __name__ == '__main__':
     app.logger.addHandler(handler)
     # 即将此handler加入到此app中
 
-    app.run(host='0.0.0.0', port=5001)
+    app.run(host='0.0.0.0', port=5001, debug=True)
