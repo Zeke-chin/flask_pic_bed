@@ -1,5 +1,6 @@
 import base64
 import hashlib
+import logging
 import os
 import re
 from base64 import b64encode
@@ -25,6 +26,7 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 # 健康检查接口
 @app.route('/ping')
 def index():
+    app.logger.info('pong！')
     return "pong!"
 
 
@@ -80,9 +82,10 @@ def upload_file():
 
         file.save(uri)
         # 保存文件
-
+        app.logger.info('POST ==> {}-{}'.format(user_name, filename))
         return jsonify(uri=uri)
         # uploads/zeke/202206/b16e8e30c0883622a95cdf8d50334abd.JPG
+
     else:
         return 'File_Name illegal'
 
@@ -92,8 +95,8 @@ def upload_file():
 def get_frame(uri):
     image_data = img_cache(uri)
     # 二进制图片
-
     request_get = Response(image_data, mimetype='image/jpg')
+    app.logger.info('GET ==> {}'.format(uri))
     return request_get
 
 
@@ -105,6 +108,7 @@ def delete_frame(uri):
     if delete_status:
         os.remove(img_path)
         del cache[uri.split('/')[-1]]
+        app.logger.info('DELETE ==> {}'.format(img_path))
     return jsonify(delete_status=str(delete_status))
 
 
@@ -131,10 +135,10 @@ def fifo_cache(func):
         key = url.split('/')[-1]
         value = cache.get(key)
         if value is not None:
-            # print('hit')
+            app.logger.info('hit ==> {}'.format(key))
             image_data = pic_decode(value)
         else:
-            # print('miss')
+            app.logger.info('miss ==> {}'.format(key))
             image_data = func(url)
             cache[key] = pic_encode(image_data)
 
@@ -174,4 +178,17 @@ def handle_exception(e):
 
 
 if __name__ == '__main__':
+    handler = logging.FileHandler('flask.log', encoding='UTF-8')
+    # 创建一个log handler
+
+    logging_format = logging.Formatter(
+        '%(asctime)s - %(levelname)s - %(filename)s - %(funcName)s - %(lineno)s - %(message)s')
+    handler.setFormatter(logging_format)
+    # 日志时间 - 日志等级 - 触发日志python文件名 - 触发日志函数名 - 触发代码行号 - app.logger.info(messages)
+
+    app.logger.setLevel(logging.INFO)
+    # 日志等级
+    app.logger.addHandler(handler)
+    # 即将此handler加入到此app中
+
     app.run(host='0.0.0.0', port=5000)
