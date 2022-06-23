@@ -104,51 +104,54 @@ def get_frame(uri):
 @app.route('/delete/<path:uri>', methods=['DELETE'])
 def delete_frame(uri):
     img_path = '/'.join(['uploads', uri])
-    delete_status = os.path.exists(img_path)
-    if delete_status:
+    img_status = os.path.exists(img_path)
+    if img_status:
         os.remove(img_path)
-        del cache[uri.split('/')[-1]]
+        img_cache.delete(img_path)
         app.logger.info('DELETE ==> {}'.format(img_path))
-    return jsonify(delete_status=str(delete_status))
-
-
-# 编码
-def pic_encode(image):
-    base64_bytes = b64encode(image)
-    base64_string = base64_bytes.decode(ENCODING)
-    return base64_string
-
-
-# 解码
-def pic_decode(value):
-    image_data = base64.b64decode(value)
-    return image_data
+    return jsonify(img_status=str(img_status))
 
 
 # 缓存器
-cache = {}
+class Cache(object):
 
+    def __init__(self, func):
+        self.func = func
+        self.cache = {}
 
-# 缓存装饰器
-def fifo_cache(func):
-    def inner(url):
+    def __call__(self, url):
         key = url.split('/')[-1]
-        value = cache.get(key)
+        value = self.cache.get(key)
         if value is not None:
-            app.logger.info('hit ==> {}'.format(key))
-            image_data = pic_decode(value)
+            app.logger.info('GET_hit ==> {}'.format(key))
+            image_data = self.pic_decode(value)
         else:
-            app.logger.info('miss ==> {}'.format(key))
-            image_data = func(url)
-            cache[key] = pic_encode(image_data)
+            app.logger.info('GET_miss ==> {}'.format(key))
+            image_data = self.func(url)
+            self.cache[key] = self.pic_encode(image_data)
 
         return image_data
 
-    return inner
+    def delete(self, url):
+        key = url.split('/')[-1]
+        app.logger.info('DELETE_Cache ==> {}'.format(key))
+        del self.cache[key]
+
+    @staticmethod
+    # b64编码
+    def pic_encode(image):
+        base64_bytes = b64encode(image)
+        base64_string = base64_bytes.decode(ENCODING)
+        return base64_string
+
+    @staticmethod
+    # b64解码
+    def pic_decode(value):
+        image_data = base64.b64decode(value)
+        return image_data
 
 
-# GET 接口缓存
-@fifo_cache
+@Cache
 def img_cache(uri):
     with open(r'uploads/{}'.format(uri), 'rb') as f:
         image_data = f.read()
@@ -191,4 +194,4 @@ if __name__ == '__main__':
     app.logger.addHandler(handler)
     # 即将此handler加入到此app中
 
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=5001)

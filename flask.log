@@ -1,0 +1,8 @@
+2022-06-23 15:25:55,605 - INFO - server.py - index - 29 - pong！
+2022-06-23 15:25:55,612 - INFO - server.py - upload_file - 85 - POST ==> zeke-steven.jpeg
+2022-06-23 15:25:55,615 - INFO - server.py - __call__ - 128 - GET_miss ==> 99bd177d4ba0082c32e49b3d26e7b62b.jpeg
+2022-06-23 15:25:55,615 - INFO - server.py - get_frame - 99 - GET ==> zeke/202206/99bd177d4ba0082c32e49b3d26e7b62b.jpeg
+2022-06-23 15:25:55,617 - INFO - server.py - __call__ - 125 - GET_hit ==> 99bd177d4ba0082c32e49b3d26e7b62b.jpeg
+2022-06-23 15:25:55,617 - INFO - server.py - get_frame - 99 - GET ==> zeke/202206/99bd177d4ba0082c32e49b3d26e7b62b.jpeg
+2022-06-23 15:25:55,622 - INFO - server.py - delete - 136 - DELETE_Cache ==> 99bd177d4ba0082c32e49b3d26e7b62b.jpeg
+2022-06-23 15:25:55,622 - INFO - server.py - delete_frame - 111 - DELETE ==> uploads/zeke/202206/99bd177d4ba0082c32e49b3d26e7b62b.jpeg

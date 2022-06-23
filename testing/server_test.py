@@ -59,7 +59,12 @@ class TestPicBed(unittest.TestCase):
         r = get_send(uri)
         self.assertEqual(True, r.ok, 'get error\nstatus_code = {}'.format(r.status_code))
 
-    def test_4_delete(self):
+    def test_4_get(self):
+        uri = 'zeke/202206/99bd177d4ba0082c32e49b3d26e7b62b.jpeg'
+        r = get_send(uri)
+        self.assertEqual(True, r.ok, 'get error\nstatus_code = {}'.format(r.status_code))
+
+    def test_5_delete(self):
         uri = 'zeke/202206/99bd177d4ba0082c32e49b3d26e7b62b.jpeg'
         r = delete_send(uri)
         self.assertEqual(True, r.ok, 'delete error\nstatus_code = {}'.format(r.status_code))
