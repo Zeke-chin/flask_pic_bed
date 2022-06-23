@@ -1,20 +1,17 @@
 import base64
-import hashlib
 import logging
-import os
-import re
 from base64 import b64encode
-from pathlib import Path
-from time import strftime, localtime
 
 from flask import Flask, request, Response, jsonify
+from flask import current_app
 from flask import json
 from werkzeug.exceptions import HTTPException
-from werkzeug.utils import secure_filename
-from flask import current_app
+
+import config
+from file_manager.file_manager import FileManager
 
 app = Flask(__name__)
-app.config.from_pyfile('config.py')
+app.config.from_object(config)
 
 
 # 健康检查接口
@@ -24,62 +21,37 @@ def index():
     return "pong!"
 
 
-# 检测文件名是否合法
-def allowed_file(filename):
-    linux_file_allowed = "^[^+-./\t\b@#$%*()\[\]][^/\t\b@#$%*()\[\]]{1,254}$"
-    filename_suffix = re.match(linux_file_allowed, filename)
-    allowed_suffix = '.' in filename and filename.rsplit('.', 1)[1].lower() in current_app.config['ALLOWED_EXTENSIONS']
-    return filename_suffix and allowed_suffix
-
-
-# 创建用户目录
-def user_file(user):
-    First_dir = user
-    # zeke
-    Second_dir = str(strftime('%Y%m', localtime()))
-    # 202206
-    path = Path(app.config['UPLOAD_FOLDER']) / First_dir / Second_dir
-    # uploads/zeke/202206
-
-    folder = os.path.exists(path)
-    if not folder:
-        os.makedirs(path)
-    return path
+Flask_File = FileManager()
 
 
 # 文件上传接口
 @app.route('/upload', methods=['POST'])
 def upload_file():
-    if 'file' not in request.files:
-        # 检测 post 是否有文件
+    # request 解析
+    files = request.files
+    # ImmutableMultiDict([('file', <FileStorage: 'steven.jpeg' ('application/octet-stream')>)])
+    file = request.files['file']
+    # <FileStorage: 'steven.jpeg' ('application/octet-stream')>
+    file_name = request.files['file'].filename
+    # 'steven.jpeg'
+    file.seek(0)
+    # '99bd177d4ba0082c32e49b3d26e7b62b.jpeg'
+    user_name = request.form['user_name']
+    # 'zeke'
+
+    # 检测 post 是否有文件
+    if 'file' not in files:
         raise Exception('No file part')
 
-    file = request.files['file']
-    user_name = request.form['user_name']
-    # 获得这个 文件、用户名
-
-    if file and allowed_file(file.filename):
+    if file and Flask_File.allowed_file(file_name):
         # 文件 和 文件拓展名 都 没有问题
 
-        path = user_file(user_name)
-        # 创建user目录 uploads/zeke/202206
+        uri = Flask_File.save(user_name, file)
+        # 保存文件 并 返回 uri
 
-        filename = secure_filename(file.filename)
-        # 获取文件名 xxx.jpg
-
-        filename_md5 = '.'.join([hashlib.md5(file.read()).hexdigest(), filename.split('.')[-1]])
-        # 获取md5文件名 b16e8e30c0883622a95cdf8d50334abd.jpg
-
-        uri = str(Path(path) / filename_md5)
-        file.seek(0)
-        # uploads/zeke/202206/b61...abd.jpg
-
-        file.save(uri)
-        # 保存文件
-        app.logger.info('POST ==> {}-{}'.format(user_name, filename))
+        app.logger.info('POST ==> {}-{}'.format(user_name, file_name))
         return jsonify(uri=uri)
         # uploads/zeke/202206/b16e8e30c0883622a95cdf8d50334abd.JPG
-
     else:
         return 'File_Name illegal'
 
@@ -87,8 +59,10 @@ def upload_file():
 # GET 接口
 @app.route('/<path:uri>', methods=['GET'])
 def get_frame(uri):
-    image_data = img_cache(uri)
+    # 'zeke/202206/99bd177d4ba0082c32e49b3d26e7b62b.jpeg'
+    image_data = Flask_File.get(uri)
     # 二进制图片
+
     request_get = Response(image_data, mimetype='image/jpg')
     app.logger.info('GET ==> {}'.format(uri))
     return request_get
@@ -97,17 +71,16 @@ def get_frame(uri):
 # 删除接口
 @app.route('/delete/<path:uri>', methods=['DELETE'])
 def delete_frame(uri):
+    # 'zeke/202206/99bd177d4ba0082c32e49b3d26e7b62b.jpeg'
     img_path = '/'.join(['uploads', uri])
-    img_status = os.path.exists(img_path)
-    if img_status:
-        os.remove(img_path)
-        img_cache.delete(img_path)
-        app.logger.info('DELETE ==> {}'.format(img_path))
-    return jsonify(img_status=str(img_status))
+    # 'uploads/zeke/202206/99bd177d4ba0082c32e49b3d26e7b62b.jpeg'
+
+    img_status = Flask_File.delete(img_path)
+    return jsonify(img_status=img_status)
 
 
 # 缓存器
-class Cache(object):
+class Cache:
 
     def __init__(self, func):
         self.func = func

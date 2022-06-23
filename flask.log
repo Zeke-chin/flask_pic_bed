@@ -1,57 +1,22 @@
-2022-06-23 15:25:55,605 - INFO - server.py - index - 29 - pong！
-2022-06-23 15:25:55,612 - INFO - server.py - upload_file - 85 - POST ==> zeke-steven.jpeg
-2022-06-23 15:25:55,615 - INFO - server.py - __call__ - 128 - GET_miss ==> 99bd177d4ba0082c32e49b3d26e7b62b.jpeg
-2022-06-23 15:25:55,615 - INFO - server.py - get_frame - 99 - GET ==> zeke/202206/99bd177d4ba0082c32e49b3d26e7b62b.jpeg
-2022-06-23 15:25:55,617 - INFO - server.py - __call__ - 125 - GET_hit ==> 99bd177d4ba0082c32e49b3d26e7b62b.jpeg
-2022-06-23 15:25:55,617 - INFO - server.py - get_frame - 99 - GET ==> zeke/202206/99bd177d4ba0082c32e49b3d26e7b62b.jpeg
-2022-06-23 15:25:55,622 - INFO - server.py - delete - 136 - DELETE_Cache ==> 99bd177d4ba0082c32e49b3d26e7b62b.jpeg
-2022-06-23 15:25:55,622 - INFO - server.py - delete_frame - 111 - DELETE ==> uploads/zeke/202206/99bd177d4ba0082c32e49b3d26e7b62b.jpeg
-2022-06-23 15:59:36,245 - INFO - server.py - __call__ - 128 - GET_miss ==> 99bd177d4ba0082c32e49b3d26e7b62b.jpeg
-2022-06-23 15:59:36,245 - ERROR - app.py - log_exception - 1455 - Exception on /zeke/202206/99bd177d4ba0082c32e49b3d26e7b62b.jpeg [GET]
-Traceback (most recent call last):
-  File "/Users/zeke/.local/lib/python3.8/site-packages/flask/app.py", line 2077, in wsgi_app
-    response = self.full_dispatch_request()
-  File "/Users/zeke/.local/lib/python3.8/site-packages/flask/app.py", line 1525, in full_dispatch_request
-    rv = self.handle_user_exception(e)
-  File "/Users/zeke/.local/lib/python3.8/site-packages/flask/app.py", line 1523, in full_dispatch_request
-    rv = self.dispatch_request()
-  File "/Users/zeke/.local/lib/python3.8/site-packages/flask/app.py", line 1509, in dispatch_request
-    return self.ensure_sync(self.view_functions[rule.endpoint])(**req.view_args)
-  File "/Users/zeke/pythonProject/flask_pic_bed/server.py", line 95, in get_frame
-    image_data = img_cache(uri)
-  File "/Users/zeke/pythonProject/flask_pic_bed/server.py", line 129, in __call__
-    image_data = self.func(url)
-  File "/Users/zeke/pythonProject/flask_pic_bed/server.py", line 155, in img_cache
-    with open(r'uploads/{}'.format(uri), 'rb') as f:
-FileNotFoundError: [Errno 2] No such file or directory: 'uploads/zeke/202206/99bd177d4ba0082c32e49b3d26e7b62b.jpeg'
-2022-06-23 16:00:51,566 - INFO - server.py - __call__ - 128 - GET_miss ==> 99bd177d4ba0082c32e49b3d26e7b62b.jpeg
-2022-06-23 16:00:58,771 - INFO - server.py - index - 28 - pong！
-2022-06-23 16:01:03,540 - INFO - server.py - __call__ - 128 - GET_miss ==> 99bd177d4ba0082c32e49b3d26e7b62b.jpeg
-2022-06-23 16:01:07,086 - INFO - server.py - index - 28 - pong！
-2022-06-23 16:01:14,862 - INFO - server.py - index - 28 - pong！
-2022-06-23 16:02:13,406 - INFO - server.py - index - 28 - pong！
-2022-06-23 16:02:55,008 - INFO - server.py - index - 28 - pong！
-2022-06-23 16:05:09,770 - INFO - server.py - index - 28 - pong！
-2022-06-23 16:05:12,977 - INFO - server.py - index - 28 - pong！
-2022-06-23 16:05:44,807 - INFO - server.py - upload_file - 84 - POST ==> zeke-steven.jpeg
-2022-06-23 16:05:49,097 - INFO - server.py - index - 28 - pong！
-2022-06-23 16:05:49,101 - INFO - server.py - upload_file - 84 - POST ==> zeke-steven.jpeg
-2022-06-23 16:05:49,103 - INFO - server.py - __call__ - 128 - GET_miss ==> 99bd177d4ba0082c32e49b3d26e7b62b.jpeg
-2022-06-23 16:05:49,115 - INFO - server.py - __call__ - 128 - GET_miss ==> 99bd177d4ba0082c32e49b3d26e7b62b.jpeg
-2022-06-23 16:05:49,123 - INFO - server.py - delete - 136 - DELETE_Cache ==> 99bd177d4ba0082c32e49b3d26e7b62b.jpeg
-2022-06-23 16:06:18,422 - INFO - server.py - index - 28 - pong！
-2022-06-23 16:06:18,428 - INFO - server.py - upload_file - 84 - POST ==> zeke-steven.jpeg
-2022-06-23 16:06:18,430 - INFO - server.py - __call__ - 128 - GET_miss ==> 99bd177d4ba0082c32e49b3d26e7b62b.jpeg
-2022-06-23 16:06:18,430 - INFO - server.py - get_frame - 98 - GET ==> zeke/202206/99bd177d4ba0082c32e49b3d26e7b62b.jpeg
-2022-06-23 16:06:18,432 - INFO - server.py - __call__ - 125 - GET_hit ==> 99bd177d4ba0082c32e49b3d26e7b62b.jpeg
-2022-06-23 16:06:18,432 - INFO - server.py - get_frame - 98 - GET ==> zeke/202206/99bd177d4ba0082c32e49b3d26e7b62b.jpeg
-2022-06-23 16:06:18,436 - INFO - server.py - delete - 136 - DELETE_Cache ==> 99bd177d4ba0082c32e49b3d26e7b62b.jpeg
-2022-06-23 16:06:18,436 - INFO - server.py - delete_frame - 110 - DELETE ==> uploads/zeke/202206/99bd177d4ba0082c32e49b3d26e7b62b.jpeg
-2022-06-23 16:06:22,457 - INFO - server.py - index - 28 - pong！
-2022-06-23 16:06:22,462 - INFO - server.py - upload_file - 84 - POST ==> zeke-steven.jpeg
-2022-06-23 16:06:22,464 - INFO - server.py - __call__ - 128 - GET_miss ==> 99bd177d4ba0082c32e49b3d26e7b62b.jpeg
-2022-06-23 16:06:22,464 - INFO - server.py - get_frame - 98 - GET ==> zeke/202206/99bd177d4ba0082c32e49b3d26e7b62b.jpeg
-2022-06-23 16:06:22,466 - INFO - server.py - __call__ - 125 - GET_hit ==> 99bd177d4ba0082c32e49b3d26e7b62b.jpeg
-2022-06-23 16:06:22,466 - INFO - server.py - get_frame - 98 - GET ==> zeke/202206/99bd177d4ba0082c32e49b3d26e7b62b.jpeg
-2022-06-23 16:06:22,469 - INFO - server.py - delete - 136 - DELETE_Cache ==> 99bd177d4ba0082c32e49b3d26e7b62b.jpeg
-2022-06-23 16:06:22,469 - INFO - server.py - delete_frame - 110 - DELETE ==> uploads/zeke/202206/99bd177d4ba0082c32e49b3d26e7b62b.jpeg
+2022-06-23 20:17:15,870 - INFO - server.py - index - 23 - pong！
+2022-06-23 20:17:16,921 - INFO - server.py - save - 38 - POST ==> zeke-steven.jpeg
+2022-06-23 20:17:16,921 - INFO - server.py - upload_file - 121 - POST ==> zeke-steven.jpeg
+2022-06-23 20:17:18,263 - INFO - server.py - get - 47 - GET_miss ==> 99bd177d4ba0082c32e49b3d26e7b62b.jpeg
+2022-06-23 20:17:18,263 - INFO - server.py - get_frame - 137 - GET ==> zeke/202206/99bd177d4ba0082c32e49b3d26e7b62b.jpeg
+2022-06-23 20:17:20,156 - INFO - server.py - get - 44 - GET_hit ==> 99bd177d4ba0082c32e49b3d26e7b62b.jpeg
+2022-06-23 20:17:20,157 - INFO - server.py - get_frame - 137 - GET ==> zeke/202206/99bd177d4ba0082c32e49b3d26e7b62b.jpeg
+2022-06-23 20:26:27,611 - INFO - server.py - index - 23 - pong！
+2022-06-23 20:26:27,623 - INFO - server.py - save - 39 - POST ==> zeke-steven.jpeg
+2022-06-23 20:26:27,624 - INFO - server.py - upload_file - 134 - POST ==> zeke-steven.jpeg
+2022-06-23 20:26:27,627 - INFO - server.py - get - 49 - GET_miss ==> 99bd177d4ba0082c32e49b3d26e7b62b.jpeg
+2022-06-23 20:26:27,628 - INFO - server.py - get_frame - 150 - GET ==> zeke/202206/99bd177d4ba0082c32e49b3d26e7b62b.jpeg
+2022-06-23 20:26:27,630 - INFO - server.py - get - 46 - GET_hit ==> 99bd177d4ba0082c32e49b3d26e7b62b.jpeg
+2022-06-23 20:26:27,630 - INFO - server.py - get_frame - 150 - GET ==> zeke/202206/99bd177d4ba0082c32e49b3d26e7b62b.jpeg
+2022-06-23 20:26:27,632 - INFO - server.py - delete - 64 - DELETE ==> uploads/zeke/202206/99bd177d4ba0082c32e49b3d26e7b62b.jpeg
+2022-06-23 20:55:30,083 - INFO - server.py - index - 19 - pong！
+2022-06-23 20:55:30,741 - INFO - server.py - index - 19 - pong！
+2022-06-23 20:55:35,515 - INFO - server.py - index - 19 - pong！
+2022-06-23 20:57:43,596 - INFO - server.py - index - 21 - pong！
+2022-06-23 20:57:43,602 - INFO - server.py - upload_file - 53 - POST ==> zeke-steven.jpeg
+2022-06-23 20:57:43,606 - INFO - server.py - get_frame - 68 - GET ==> zeke/202206/99bd177d4ba0082c32e49b3d26e7b62b.jpeg
+2022-06-23 20:57:43,610 - INFO - server.py - get_frame - 68 - GET ==> zeke/202206/99bd177d4ba0082c32e49b3d26e7b62b.jpeg
