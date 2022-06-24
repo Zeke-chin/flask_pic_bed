@@ -1,5 +1,6 @@
 import base64
 import logging
+import sys
 from base64 import b64encode
 
 from flask import Flask, request, Response, jsonify
@@ -148,7 +149,7 @@ def handle_exception(e):
 
 
 if __name__ == '__main__':
-    handler = logging.FileHandler('flask.log', encoding='UTF-8')
+    handler = logging.StreamHandler(sys.stdout)
     # 创建一个log handler
 
     logging_format = logging.Formatter(
