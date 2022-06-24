@@ -11,10 +11,7 @@ from flask import current_app
 from flask import json
 from werkzeug.exceptions import HTTPException
 
-from flask_pic_bed import config
-
-app = Flask(__name__)
-app.config.from_object(config)
+from config.config import config
 
 
 class FileManager:
@@ -30,7 +27,7 @@ class FileManager:
         filenamemd5 = '.'.join([hashlib.md5(file.read()).hexdigest(), file.filename.split('.')[-1]])
         uri = str(Path(path) / filenamemd5)
         file.save(uri)
-        app.logger.info('POST ==> {}-{}'.format(username, file.filename))
+        current_app.logger.info('POST ==> {}-{}'.format(username, file.filename))
         return uri
 
     # 取图片(带缓存)
@@ -38,10 +35,10 @@ class FileManager:
         key = uri.split('/')[-1]
         value = self.cache.get(key)
         if value is not None:
-            app.logger.info('GET_hit ==> {}'.format(key))
+            current_app.logger.info('GET_hit ==> {}'.format(key))
             image_data = self.pic_decode(value)
         else:
-            app.logger.info('GET_miss ==> {}'.format(key))
+            current_app.logger.info('GET_miss ==> {}'.format(key))
             with open(r'uploads/{}'.format(uri), 'rb') as f:
                 image_data = f.read()
                 self.cache[key] = self.pic_encode(image_data)
@@ -56,7 +53,7 @@ class FileManager:
             os.remove(path)
             key = path.split('/')[-1]
             del self.cache[key]
-            app.logger.info('DELETE ==> {}'.format(path))
+            current_app.logger.info('DELETE ==> {}'.format(path))
         return str(img_status)
 
     # 检测 文件名和文件后缀
@@ -75,7 +72,7 @@ class FileManager:
         # zeke
         Second_dir = str(strftime('%Y%m', localtime()))
         # 202206
-        path = Path(app.config['UPLOAD_FOLDER']) / First_dir / Second_dir
+        path = Path(current_app.config['UPLOAD_FOLDER']) / First_dir / Second_dir
         # uploads/zeke/202206
 
         folder = os.path.exists(path)
@@ -87,7 +84,7 @@ class FileManager:
     # b64编码
     def pic_encode(image):
         base64_bytes = b64encode(image)
-        base64_string = base64_bytes.decode(app.config['ENCODING'])
+        base64_string = base64_bytes.decode(current_app.config['ENCODING'])
         return base64_string
 
     @staticmethod

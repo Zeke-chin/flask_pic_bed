@@ -7,7 +7,7 @@ from flask import current_app
 from flask import json
 from werkzeug.exceptions import HTTPException
 
-import config
+from config.config import config
 from file_manager.file_manager import FileManager
 
 app = Flask(__name__)
