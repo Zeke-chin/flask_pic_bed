@@ -5,7 +5,7 @@ from pathlib import Path
 
 import requests
 
-url = "http://127.0.0.1:5001"
+url = "http://0.0.0.0:5000"
 img_path = "./uploads/steven.jpeg"
 user_name = "zeke"
 ENCODING = 'utf-8'
